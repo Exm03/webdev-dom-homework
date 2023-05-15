@@ -5,7 +5,7 @@ const commentClickListener = () => {
     for (const comment of boxOfCommentsTexts) {
       comment.addEventListener('click', () => {
         newComment.setAttribute('style', 'white-space: pre-line;');
-        const replace = `${usersComments[comment.dataset.id].comment} \r\n \r\n ${usersComments[comment.dataset.id].name}`
+        const replace = `${usersComments[comment.dataset.id].text} \r\n \r\n ${usersComments[comment.dataset.id].name}`
         newComment.value = `| ${replace} \r\n\|`
       })
     }
@@ -17,9 +17,15 @@ const likeButtons = document.querySelectorAll('.likes');
   
   for (const likeButton of likeButtons) {
     likeButton.addEventListener('click', (e) => {
-      (usersComments[e.target.dataset.id].Iliked) ? delLikes(e) : addLikes(e);
+      e.stopPropagation()
+      const comment = usersComments[e.target.dataset.id];
+        if (comment.isLiked) {
+          delLikes(e);
+        } else {
+          addLikes(e);
+        }
     renderComments();
-    e.stopPropagation()
+    
     })
     
   }
