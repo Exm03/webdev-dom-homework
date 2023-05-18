@@ -77,7 +77,6 @@ function addNewComment() {
       postComments()
       renderComments()
       commentClickListener()
-      
 }
 getComments()
 
