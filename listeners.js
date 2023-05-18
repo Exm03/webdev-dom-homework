@@ -24,23 +24,23 @@ const likeButtons = document.querySelectorAll('.likes');
   }
 }
 
-newName.addEventListener('input', function () {
-    if (newName.value.length < 2 || newComment.value.length < 5) {
-        addButton.setAttribute('disabled', 'disabled')
-    }
-    else{
-        addButton.removeAttribute('disabled')
-    }
-});
+// newName.addEventListener('input', function () {
+//     if (newName.value.length < 2 || newComment.value.length < 5) {
+//         addButton.setAttribute('disabled', 'disabled')
+//     }
+//     else{
+//         addButton.removeAttribute('disabled')
+//     }
+// });
 
-newComment.addEventListener('input', function () {
-    if (newName.value.length < 2 || newComment.value.length < 5) {
-        addButton.setAttribute('disabled', 'disabled')
-    }
-    else{
-        addButton.removeAttribute('disabled')
-    }
-});
+// newComment.addEventListener('input', function () {
+//     if (newName.value.length < 2 || newComment.value.length < 5) {
+//         addButton.setAttribute('disabled', 'disabled')
+//     }
+//     else{
+//         addButton.removeAttribute('disabled')
+//     }
+// });
 
 
 addButton.addEventListener('click', addNewComment)
