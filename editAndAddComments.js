@@ -34,7 +34,7 @@ function postComments () {
   return fetch("https://webdev-hw-api.vercel.app/api/v1/yan-lagun/comments", {
     method: "POST",
     body: JSON.stringify({
-      forceError: true,
+      forceError: false,
       "text": newComment.value.replaceAll("&", "&amp;")
             .replaceAll("<", "&lt;")
             .replaceAll(">", "&gt;")
