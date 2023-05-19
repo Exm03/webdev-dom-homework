@@ -53,6 +53,7 @@ function postComments () {
       } if (response.status === 500) {
         return Promise.reject(new Error("Сервер упал"))
       } else {
+        console.log(response.status)
         return Promise.reject(new Error("неизвестная ошибка"))
       }
     }).then((responseData) => {
@@ -60,11 +61,14 @@ function postComments () {
       cleareInputs()
         renderComments();
     }).catch((error) => {
-      alert(error.message)
       loadedComment = false
       renderForm(loadedComment)
       if (error.message === "Сервер упал") {
         postComments()
+      } if (error.message === 'Failed to fetch') {
+        alert('Кажеться у вас сломался интернет, попробуйте позже')
+      } else {
+        alert(error.message)
       }
     });
 }
