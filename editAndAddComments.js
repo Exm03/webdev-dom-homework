@@ -3,21 +3,30 @@ function getComments () {
   return fetch("https://webdev-hw-api.vercel.app/api/v1/yan-lagun/comments", {
     method: "GET"
   }).then((response) => {
-    return response.json();
+    if (response.status === 200) {
+      return response.json()
+    } if (response.status === 500) {
+      return Promise.reject(new Error("Сервер упал"))
+    } else {
+      return Promise.reject(new Error("неизвестная ошибка"))
+    }
   }).then((responseData) => {
     usersComments = responseData.comments.map((comment) => {
-      
       return {
         name: comment.author.name,
         date: new Date(comment.date),
         text: comment.text,
         likes: comment.likes,
-        isLiked: comment.isLiked
+        isLiked: comment.isLiked,
       }
-    });
+    })
     loadedComment = false
     renderForm(loadedComment)
     renderComments();
+  }).catch((error) => {
+    alert(error)
+    loadedComment = false
+    renderForm(loadedComment)
   });
 }
 
@@ -25,6 +34,7 @@ function postComments () {
   return fetch("https://webdev-hw-api.vercel.app/api/v1/yan-lagun/comments", {
     method: "POST",
     body: JSON.stringify({
+      forceError: false,
       "text": newComment.value.replaceAll("&", "&amp;")
             .replaceAll("<", "&lt;")
             .replaceAll(">", "&gt;")
@@ -36,10 +46,30 @@ function postComments () {
             .replaceAll(">", "&gt;")
             .replaceAll('"', "&quot;"),
     })}).then((response) => {
+      if (response.status === 201) {
         return response.json()
+      } if (response.status === 400 || newComment.value.length < 3 && newName.value.length < 3) {
+        return Promise.reject(new Error("Имя или коммент слишком короткие"))
+      } if (response.status === 500) {
+        return Promise.reject(new Error("Сервер упал"))
+      } else {
+        console.log(response.status)
+        return Promise.reject(new Error("неизвестная ошибка"))
+      }
     }).then((responseData) => {
       getComments()
+      cleareInputs()
         renderComments();
+    }).catch((error) => {
+      loadedComment = false
+      renderForm(loadedComment)
+      if (error.message === "Сервер упал") {
+        postComments()
+      } if (error.message === 'Failed to fetch') {
+        alert('Кажеться у вас сломался интернет, попробуйте позже')
+      } else {
+        alert(error.message)
+      }
     });
 }
 
@@ -49,7 +79,6 @@ function addNewComment() {
       let loadedComment = true
       renderForm(loadedComment)
       postComments()
-      cleareInputs()
       renderComments()
       commentClickListener()
 }
@@ -77,5 +106,5 @@ function formatDate(date) {
 function cleareInputs () {
     newName.value = ''
     newComment.value = ''
-    addButton.setAttribute('disabled', 'disabled')
+    // addButton.setAttribute('disabled', 'disabled')
 }
