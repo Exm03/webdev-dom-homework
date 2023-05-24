@@ -1,21 +1,25 @@
-const commentClickListener = () => {
+import { form, newName, newComment, addButton, boxOfComments} from "./comments.js";
+import { addNewComment, allComments } from "./api.js";
+import { AddLikeOrDelLike } from "./addDelLikes.js";
+
+ let commentClickListener = () => {
   
-    const boxOfCommentsTexts = boxOfComments.querySelectorAll('.comment')
+    let boxOfCommentsTexts = document.querySelectorAll('.comment')
   
-    for (const comment of boxOfCommentsTexts) {
+    for (let comment of boxOfCommentsTexts) {
       comment.addEventListener('click', () => {
         newComment.setAttribute('style', 'white-space: pre-line;');
-        const replace = `${usersComments[comment.dataset.id].text} \r\n \r\n ${usersComments[comment.dataset.id].name}`
+        let replace = `${allComments[comment.dataset.id].text} \r\n \r\n ${allComments[comment.dataset.id].name}`
         newComment.value = `| ${replace} \r\n\|`
       })
     }
 }
 
-const initEventListeners = () => {
+let initEventListeners = () => {
 
-const likeButtons = document.querySelectorAll('.likes');
+let likeButtons = document.querySelectorAll('.likes');
   
-  for (const likeButton of likeButtons) {
+  for (let likeButton of likeButtons) {
     likeButton.addEventListener('click', (e) => {
       e.stopPropagation()
       AddLikeOrDelLike(e)
@@ -24,23 +28,25 @@ const likeButtons = document.querySelectorAll('.likes');
   }
 }
 
-// newName.addEventListener('input', function () {
-//     if (newName.value.length < 2 || newComment.value.length < 5) {
-//         addButton.setAttribute('disabled', 'disabled')
-//     }
-//     else{
-//         addButton.removeAttribute('disabled')
-//     }
-// });
+export {commentClickListener, initEventListeners}
 
-// newComment.addEventListener('input', function () {
-//     if (newName.value.length < 2 || newComment.value.length < 5) {
-//         addButton.setAttribute('disabled', 'disabled')
-//     }
-//     else{
-//         addButton.removeAttribute('disabled')
-//     }
-// });
+newName.addEventListener('input', function () {
+    if (newName.value.length < 3 || newComment.value.length < 3) {
+        addButton.setAttribute('disabled', 'disabled')
+    }
+    else{
+        addButton.removeAttribute('disabled')
+    }
+});
+
+newComment.addEventListener('input', function () {
+    if (newName.value.length < 3 || newComment.value.length < 3) {
+        addButton.setAttribute('disabled', 'disabled')
+    }
+    else{
+        addButton.removeAttribute('disabled')
+    }
+});
 
 
 addButton.addEventListener('click', addNewComment)
@@ -54,7 +60,11 @@ form.addEventListener('keyup', function (event) {
     }
 })
 
+let comments = document.querySelector('.comments');
+let delButton = form.querySelector('.del-form-button');
+
 delButton.addEventListener('click', function () {
     comments.removeChild(comments.lastChild)
-    usersComments.pop()
+    allComments.pop()
 })
+

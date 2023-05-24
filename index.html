@@ -27,7 +27,7 @@
         ></textarea>
         <div class="add-form-row">
           <button class="del-form-button hide">Удалить последний комментарий </button>
-          <button class="add-form-button" >Написать</button>
+          <button class="add-form-button" disabled >Написать</button>
         </div>
 
       </div>
@@ -49,12 +49,11 @@
     "use strict";
     // Код писать здесь
     console.log("It works!");
-  </script>
-  <script src="./comments.js"></script>
-  <script src="./loader.js"></script>
-  <script src="./editAndAddComments.js"></script>
-  <script src="./listeners.js"></script>
-  <script src="./renderComments.js"></script>
-  <script src="./addDelLikes.js"></script>
+    </script>
+  <script type="module" src="./comments.js"></script>
+  <script type="module" src="./api.js"></script>
+  <script type="module" src="renderComments.js"></script>
+  <script type="module" src="listeners.js"></script>
+  <script type="module" src="addDelLikes.js"></script>
 
 </html>
