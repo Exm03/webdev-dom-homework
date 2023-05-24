@@ -1,8 +1,9 @@
-import { form, newName, newComment, addButton, boxOfComments} from "./comments.js";
-import { addNewComment, allComments } from "./api.js";
-import { AddLikeOrDelLike } from "./addDelLikes.js";
+import { form, newName, newComment, addButton} from "./comments.js";
+import {allComments } from "./api.js";
+import { AddLikeOrDelLike } from "./utilis.js";
+import { addNewComment } from "./utilis.js";
 
- let commentClickListener = () => {
+let commentClickListener = () => {
   
     let boxOfCommentsTexts = document.querySelectorAll('.comment')
   
@@ -17,10 +18,10 @@ import { AddLikeOrDelLike } from "./addDelLikes.js";
 
 let initEventListeners = () => {
 
-let likeButtons = document.querySelectorAll('.likes');
+  let likeButtons = document.querySelectorAll('.likes');
   
-  for (let likeButton of likeButtons) {
-    likeButton.addEventListener('click', (e) => {
+    for (let likeButton of likeButtons) {
+      likeButton.addEventListener('click', (e) => {
       e.stopPropagation()
       AddLikeOrDelLike(e)
     })

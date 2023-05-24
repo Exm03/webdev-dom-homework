@@ -1,8 +1,9 @@
-import { newName, newComment, addButton } from "./comments.js";
-import { commentClickListener } from "./listeners.js";
+import { newName, newComment } from "./comments.js";
 import { renderComments, renderLoaderComments, renderForm } from "./renderComments.js";
+import { cleareInputs} from "./utilis.js";
 
-let loadedComment = true
+
+
 let allComments = []
 
 function getComments () {
@@ -27,13 +28,13 @@ function getComments () {
         isLiked: comment.isLiked,
       }
     })
-    loadedComment = false
+    let loadedComment = false
     renderForm(loadedComment)
     renderComments();
   }).catch((error) => {
     console.log(error)
     alert(error)
-    loadedComment = false
+    let loadedComment = false
     renderForm(loadedComment)
   });
 }
@@ -70,7 +71,7 @@ function postComments () {
       cleareInputs()
         renderComments();
     }).catch((error) => {
-      loadedComment = false
+      let loadedComment = false
       renderForm(loadedComment)
       if (error.message === "Сервер упал") {
         postComments()
@@ -84,20 +85,5 @@ function postComments () {
 
 
 
- function addNewComment() {
-      let date = new Date();
-      loadedComment = true
-      renderForm(loadedComment)
-      postComments()
-      renderComments()
-      commentClickListener()
-}
+export {allComments, postComments}
 
-export {addNewComment, allComments}
-
-
-function cleareInputs () {
-  newName.value = ''
-  newComment.value = ''
-  addButton.setAttribute('disabled', 'disabled')
-}
