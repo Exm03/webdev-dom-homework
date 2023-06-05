@@ -1,7 +1,15 @@
+import { newName, newComment } from "./comments.js";
+import { renderComments, renderLoaderComments, renderForm } from "./renderComments.js";
+import { cleareInputs} from "./utilis.js";
+
+
+
+let allComments = []
+
 function getComments () {
-  loadrComments()
+  renderLoaderComments()
   return fetch("https://webdev-hw-api.vercel.app/api/v1/yan-lagun/comments", {
-    method: "GET"
+    method: "GET",
   }).then((response) => {
     if (response.status === 200) {
       return response.json()
@@ -11,7 +19,7 @@ function getComments () {
       return Promise.reject(new Error("неизвестная ошибка"))
     }
   }).then((responseData) => {
-    usersComments = responseData.comments.map((comment) => {
+     allComments = responseData.comments.map((comment) => {
       return {
         name: comment.author.name,
         date: new Date(comment.date),
@@ -20,15 +28,17 @@ function getComments () {
         isLiked: comment.isLiked,
       }
     })
-    loadedComment = false
+    let loadedComment = false
     renderForm(loadedComment)
     renderComments();
   }).catch((error) => {
+    console.log(error)
     alert(error)
-    loadedComment = false
+    let loadedComment = false
     renderForm(loadedComment)
   });
 }
+getComments()
 
 function postComments () {
   return fetch("https://webdev-hw-api.vercel.app/api/v1/yan-lagun/comments", {
@@ -61,7 +71,7 @@ function postComments () {
       cleareInputs()
         renderComments();
     }).catch((error) => {
-      loadedComment = false
+      let loadedComment = false
       renderForm(loadedComment)
       if (error.message === "Сервер упал") {
         postComments()
@@ -74,37 +84,6 @@ function postComments () {
 }
 
 
-function addNewComment() {
-      const dateNow = new Date();
-      let loadedComment = true
-      renderForm(loadedComment)
-      postComments()
-      renderComments()
-      commentClickListener()
-}
-getComments()
 
-function formatDate(date) {
-  
-    let dd = date.getDate();
-    if (dd < 10) dd = '0' + dd;
-    
-    let mm = date.getMonth() + 1;
-    if (mm < 10) mm = '0' + mm;
-    
-    let yy = date.getFullYear() % 100;
-    if (yy < 10) yy = '0' + yy;
-    
-    let hh = date.getHours() % 100
-    if (hh < 10) hh = '0' + hh;
-  
-    let mi = date.getMinutes() % 100
-    if (mi < 10) mi = '0' + mi;
-    return dd + '.' + mm + '.' + yy + ' ' + hh + ':' + mi;
-}
+export {allComments, postComments}
 
-function cleareInputs () {
-    newName.value = ''
-    newComment.value = ''
-    // addButton.setAttribute('disabled', 'disabled')
-}
