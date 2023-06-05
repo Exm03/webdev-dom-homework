@@ -1,14 +1,16 @@
-import { newName, newComment } from "./comments.js";
-import { renderComments, renderLoaderComments, renderForm } from "./renderComments.js";
+// import { newName , newComment} from "./comments.js";
+import { listenersOfForm} from "./listeners.js";
+import { renderComments, renderLoaderComments, renderForm, renderInputs } from "./renderComments.js";
 import { cleareInputs} from "./utilis.js";
 
 
-
+let logined = false
 let allComments = []
+let userData = []
 
 function getComments () {
   renderLoaderComments()
-  return fetch("https://webdev-hw-api.vercel.app/api/v1/yan-lagun/comments", {
+  return fetch("https://wedev-api.sky.pro/api/v2/yan-lagun/comments", {
     method: "GET",
   }).then((response) => {
     if (response.status === 200) {
@@ -31,6 +33,8 @@ function getComments () {
     let loadedComment = false
     renderForm(loadedComment)
     renderComments();
+    renderInputs()
+    
   }).catch((error) => {
     console.log(error)
     alert(error)
@@ -40,9 +44,12 @@ function getComments () {
 }
 getComments()
 
-function postComments () {
-  return fetch("https://webdev-hw-api.vercel.app/api/v1/yan-lagun/comments", {
+function postComments (newComment) {
+  return fetch("https://wedev-api.sky.pro/api/v2/yan-lagun/comments", {
     method: "POST",
+    headers: {
+      Authorization: 'Bearer ' + userData.user.token
+    },
     body: JSON.stringify({
       forceError: false,
       "text": newComment.value.replaceAll("&", "&amp;")
@@ -51,14 +58,11 @@ function postComments () {
             .replaceAll('"', "&quot;")
             .replace("|", "<div class='quote'>")
             .replace("|", "</div>"),
-      "name": newName.value.replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll('"', "&quot;"),
+      "name": userData.user.name,
     })}).then((response) => {
       if (response.status === 201) {
         return response.json()
-      } if (response.status === 400 || newComment.value.length < 3 && newName.value.length < 3) {
+      } if (response.status === 400 ) {
         return Promise.reject(new Error("Имя или коммент слишком короткие"))
       } if (response.status === 500) {
         return Promise.reject(new Error("Сервер упал"))
@@ -68,8 +72,86 @@ function postComments () {
       }
     }).then((responseData) => {
       getComments()
-      cleareInputs()
+      cleareInputs(newComment)
         renderComments();
+        renderInputs()
+    }).catch((error) => {
+      let loadedComment = false
+      renderForm(loadedComment)
+      if (error.message === "Сервер упал") {
+        postComments()
+      } if (error.message === 'Failed to fetch') {
+        alert('Кажеться у вас сломался интернет, попробуйте позже')
+      } else {
+        alert(error.message)
+      }
+    });
+}
+
+export function loginUser (regLogin, regName, regPassword) {
+  return fetch("https://wedev-api.sky.pro/api/user", {
+    method: "POST",
+    body: JSON.stringify({
+      forceError: false,
+      "login": regLogin.value,
+  "name": regName.value,
+  "password": regPassword.value
+    })}).then((response) => {
+      if (response.status === 201) {
+        return response.json()
+      } if (response.status === 400 ) {
+        return Promise.reject(new Error("Пользователь с таким логином существует"))
+      } if (response.status === 500) {
+        return Promise.reject(new Error("Сервер упал"))
+      } else {
+        console.log(response.status)
+        return Promise.reject(new Error("неизвестная ошибка"))
+      }
+    }).then((responseData) => {
+      getComments()
+      userData = responseData
+      logined = true
+      listenersOfForm()
+      return userData, logined
+      
+    }).catch((error) => {
+      let loadedComment = false
+      renderForm(loadedComment)
+      if (error.message === "Сервер упал") {
+        postComments()
+      } if (error.message === 'Failed to fetch') {
+        alert('Кажеться у вас сломался интернет, попробуйте позже')
+      } else {
+        alert(error.message)
+      }
+    });
+    
+}
+
+export function autorisationUser (logLogin, logPassword) {
+  return fetch("https://wedev-api.sky.pro/api/user/login", {
+    method: "POST",
+    body: JSON.stringify({
+      forceError: false,
+      "login": logLogin.value,
+  "password": logPassword.value
+    })}).then((response) => {
+      if (response.status === 201) {
+        return response.json()
+      } if (response.status === 400 ) {
+        return Promise.reject(new Error("неверный логин и/или пароль"))
+      } if (response.status === 500) {
+        return Promise.reject(new Error("Сервер упал"))
+      } else {
+        console.log(response.status)
+        return Promise.reject(new Error("неизвестная ошибка"))
+      }
+    }).then((responseData) => {
+      getComments()
+      userData = responseData
+      logined = true
+      listenersOfForm()
+      return userData, logined
     }).catch((error) => {
       let loadedComment = false
       renderForm(loadedComment)
@@ -85,5 +167,5 @@ function postComments () {
 
 
 
-export {allComments, postComments}
+export {allComments, postComments, userData, logined}
 
