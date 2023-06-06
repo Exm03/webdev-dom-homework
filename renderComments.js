@@ -60,7 +60,7 @@ const forms = document.querySelector('.forms')
     <div class="add-form-row">
       <button class="del-form-button hide">Удалить последний комментарий </button>
       <button class="add-form-button" >Написать</button>
-    </div>`: `<div>Только авторизованные пользователи могут оставлять комменты <a id= "reg-href" class="reg-href" href = # ()> авторизоваться </a> </div>`}` 
+    </div>`: `<div class= "autoriz-info">Только <a id= "reg-href" class="reg-href" href = #> авторизованные  </a>  пользователи могут оставлять комменты  </div>`}` 
     
       if(logined){
         listenersOfForm()
@@ -125,7 +125,7 @@ function renderRegForm () {
   <div class="add-form-row">
     <button id= reg-button  class="reg-button" > Зарегистрироваться </button>
   </div>`
-  forms.innerHTML = `<button class= login-form> Войти </button>` 
+  forms.innerHTML = `<button class= login-form> Я хочу войти в свой аккаунт </button>` 
 }
 
 export function autorizationForm(params) {
