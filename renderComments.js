@@ -44,6 +44,7 @@ const forms = document.querySelector('.forms')
   export function renderInputs () {
     forms.innerHTML = `${ logined ? `<div class="add-form " >
     <input
+    disabled
     minlength="2"
       type="text"
       class="add-form-name"
