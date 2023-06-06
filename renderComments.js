@@ -1,9 +1,22 @@
 import {  boxOfComments } from "./comments.js";
 import { commentClickListener, initEventListeners, listenerHref, listenersOfForm} from "./listeners.js";
-import { allComments, userData, logined} from "./api.js";
+import { allComments, userData} from "./api.js";
 import { formatDate } from "./utilis.js";
 
+let token = ""
+let logined = ""
 
+export function canLogined(token) {
+  if (!token) {
+    logined = false
+    return logined
+  }
+   else{
+    logined = true
+    return logined
+  }
+}
+canLogined(token)
 
 let renderComments = () => {
     let commentsHtml = allComments
@@ -163,4 +176,4 @@ function renderForm (loadedComment) {
 
 
 
-export {renderComments, renderLoaderComments, renderForm, logined, renderRegForm}
+export {renderComments, renderLoaderComments, renderForm, renderRegForm}

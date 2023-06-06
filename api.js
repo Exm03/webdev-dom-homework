@@ -1,14 +1,14 @@
 // import { newName , newComment} from "./comments.js";
 import { listenersOfForm} from "./listeners.js";
-import { renderComments, renderLoaderComments, renderForm, renderInputs } from "./renderComments.js";
+import { renderComments, renderLoaderComments, renderForm, renderInputs, canLogined } from "./renderComments.js";
 import { cleareInputs} from "./utilis.js";
 
 
-let logined = false
+// let logined = false
 let allComments = []
 let userData = []
 
-function getComments () {
+function getComments (userData) {
   renderLoaderComments()
   return fetch("https://wedev-api.sky.pro/api/v2/yan-lagun/comments", {
     method: "GET",
@@ -33,8 +33,7 @@ function getComments () {
     let loadedComment = false
     renderForm(loadedComment)
     renderComments();
-    renderInputs()
-    
+      renderInputs()
   }).catch((error) => {
     console.log(error)
     alert(error)
@@ -74,7 +73,7 @@ function postComments (newComment) {
       getComments()
       cleareInputs(newComment)
         renderComments();
-        renderInputs()
+          renderInputs()
     }).catch((error) => {
       let loadedComment = false
       renderForm(loadedComment)
@@ -110,9 +109,9 @@ export function loginUser (regLogin, regName, regPassword) {
     }).then((responseData) => {
       getComments()
       userData = responseData
-      logined = true
+      canLogined(userData.user.token)
       listenersOfForm()
-      return userData, logined
+      return userData
       
     }).catch((error) => {
       let loadedComment = false
@@ -149,9 +148,9 @@ export function autorisationUser (logLogin, logPassword) {
     }).then((responseData) => {
       getComments()
       userData = responseData
-      logined = true
+      canLogined(userData.user.token)
       listenersOfForm()
-      return userData, logined
+      return userData
     }).catch((error) => {
       let loadedComment = false
       renderForm(loadedComment)
@@ -160,12 +159,10 @@ export function autorisationUser (logLogin, logPassword) {
       } if (error.message === 'Failed to fetch') {
         alert('Кажеться у вас сломался интернет, попробуйте позже')
       } else {
-        alert(error.message)
+        console.log(error.message)
       }
     });
 }
 
-
-
-export {allComments, postComments, userData, logined}
+export {allComments, postComments, userData}
 
