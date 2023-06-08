@@ -27,7 +27,7 @@ let renderComments = () => {
           isLiked = '-active-like';
         }
         
-        let date = format(comment.date, 'dd.MM.yyyy hh:mm')
+        let date = format(comment.date, 'dd.MM.yyyy HH:mm')
         return `<li class="comment" data-id="${id}">
         <div class="comment-header">
           <div>${comment.name}</div>
