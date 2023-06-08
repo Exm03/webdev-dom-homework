@@ -2,12 +2,13 @@ import {  boxOfComments } from "./comments.js";
 import { commentClickListener, initEventListeners, listenerHref, listenersOfForm} from "./listeners.js";
 import { allComments, userData} from "./api.js";
 import { formatDate } from "./utilis.js";
+import { format } from "./node_modules/date-fns"
 
-let token = ""
+let tok = ""
 let logined = ""
 
-export function canLogined(token) {
-  if (!token) {
+export function canLogined(tok) {
+  if (!tok) {
     logined = false
     return logined
   }
@@ -16,7 +17,7 @@ export function canLogined(token) {
     return logined
   }
 }
-canLogined(token)
+canLogined(tok)
 
 let renderComments = () => {
     let commentsHtml = allComments
@@ -26,7 +27,7 @@ let renderComments = () => {
           isLiked = '-active-like';
         }
         
-        let date = formatDate(comment.date)
+        let date = format(comment.date, 'dd.MM.yyyy hh:mm')
         return `<li class="comment" data-id="${id}">
         <div class="comment-header">
           <div>${comment.name}</div>

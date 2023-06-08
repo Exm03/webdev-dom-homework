@@ -3,6 +3,7 @@ import { allComments, postComments, userData} from "./api.js";
 import { renderComments, renderForm} from "./renderComments.js";
 import { commentClickListener } from "./listeners.js";
 
+
 function formatDate(date) {
   
     let dd = date.getDate();
