@@ -1,13 +1,14 @@
-import {  boxOfComments } from "./comments.js";
 import { commentClickListener, initEventListeners, listenerHref, listenersOfForm} from "./listeners.js";
 import { allComments, userData} from "./api.js";
-import { formatDate } from "./utilis.js";
 
-let token = ""
+import { format } from "./node_modules/date-fns"
+
+let tok = ""
 let logined = ""
+let boxOfComments = document.querySelector('.comments');
 
-export function canLogined(token) {
-  if (!token) {
+export function canLogined(tok) {
+  if (!tok) {
     logined = false
     return logined
   }
@@ -16,7 +17,7 @@ export function canLogined(token) {
     return logined
   }
 }
-canLogined(token)
+canLogined(tok)
 
 let renderComments = () => {
     let commentsHtml = allComments
@@ -26,7 +27,7 @@ let renderComments = () => {
           isLiked = '-active-like';
         }
         
-        let date = formatDate(comment.date)
+        let date = format(comment.date, 'dd.MM.yyyy H:mm')
         return `<li class="comment" data-id="${id}">
         <div class="comment-header">
           <div>${comment.name}</div>
@@ -86,6 +87,7 @@ const forms = document.querySelector('.forms')
   
  
 function renderLoaderComments () {
+  let boxOfComments = document.querySelector('.comments');
   boxOfComments.innerHTML = `<li class=" comment comment_loader loading">
 <div class="comment-header comment__header_loader">
 <div class="animated-background  comment__name_loader">
@@ -114,6 +116,7 @@ function renderLoaderComments () {
 <div class="animated-background  like__button_loader"></div>
 </div>
 </li>`
+return boxOfComments
 }
 
 function renderRegForm () {
